@@ -12,9 +12,9 @@ export const CATEGORIES = [
 export const PRODUCTS: Product[] = [
   {
     id: "leche",
-    title: "Leche Entera",
-    price: 1500,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200",
+    title: "Leche Multidefensa 3% La Serenisima 1 Lt.",
+    price: 3000,
+    image: "https://ardiaprod.vtexassets.com/arquivos/ids/343627-500-auto?v=638732576485070000&width=500&height=auto&aspect=true",
     description: "Leche entera de tambo local, 1L.",
     category: "Lácteos",
   },
