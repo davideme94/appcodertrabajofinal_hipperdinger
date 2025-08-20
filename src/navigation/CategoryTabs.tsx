@@ -4,7 +4,11 @@ import CategoryListScreen from "../screens/CategoryListScreen";
 import { CATEGORIES } from "../features/products/mock";
 import { COLORS } from "../theme/colors";
 
-const Tab = createMaterialTopTabNavigator();
+type CategoryTabParamList = {
+  [key: string]: { category: string } | undefined;
+};
+
+const Tab = createMaterialTopTabNavigator<CategoryTabParamList>();
 
 export default function CategoryTabs() {
   return (
@@ -22,8 +26,10 @@ export default function CategoryTabs() {
         <Tab.Screen
           key={cat}
           name={cat}
+          component={CategoryListScreen}
           options={{ title: cat }}
-          children={() => <CategoryListScreen category={cat} />}
+          // 👇 Pasamos la categoría como parámetro para que no sea undefined
+          initialParams={{ category: cat }}
         />
       ))}
     </Tab.Navigator>

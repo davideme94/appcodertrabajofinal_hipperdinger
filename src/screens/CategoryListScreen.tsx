@@ -1,37 +1,30 @@
 import React, { useMemo } from "react";
-import { View, FlatList, StyleSheet, ListRenderItem } from "react-native";
-import ProductCard from "../components/ProductCard";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { HomeStackParamList } from "../navigation/HomeStack";
+import { View, FlatList, StyleSheet } from "react-native";
 import { PRODUCTS } from "../features/products/mock";
-import { Product } from "../features/products/types";
-import { COLORS } from "../theme/colors";
+import ProductCard from "../components/ProductCard";
 
-type Nav = NativeStackNavigationProp<HomeStackParamList>;
-type Props = { category: string };
+type Props = { route: { params: { category: string } } };
 
-export default function CategoryListScreen({ category }: Props) {
-  const navigation = useNavigation<Nav>();
+export default function CategoryListScreen({ route }: Props) {
+  const { category } = route.params;
 
-  const data = useMemo<Product[]>(() => {
-    if (category === "Ofertas") return PRODUCTS.filter((p) => p.offer);
-    return PRODUCTS.filter((p) => p.category === category);
-  }, [category]);
-
-  const renderItem: ListRenderItem<Product> = ({ item }) => (
-    <ProductCard product={item} onPress={() => navigation.navigate("ProductDetail", { product: item })} />
+  const filtered = useMemo(
+    () =>
+      category === "Ofertas"
+        ? PRODUCTS.filter((p) => p.offer)
+        : PRODUCTS.filter((p) => p.category === category),
+    [category]
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.wrap}>
       <FlatList
-        data={data}
+        data={filtered}
         keyExtractor={(it) => it.id}
-        renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={{ gap: 12 }}
         contentContainerStyle={{ padding: 12, gap: 12 }}
+        renderItem={({ item }) => <ProductCard product={item} />}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -39,5 +32,5 @@ export default function CategoryListScreen({ category }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.crema + "33" },
+  wrap: { flex: 1, backgroundColor: "#f7f7f7" },
 });

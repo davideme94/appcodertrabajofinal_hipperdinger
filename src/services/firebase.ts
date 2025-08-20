@@ -1,20 +1,29 @@
-// src/services/firebase.ts
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDatabase } from "firebase/database";
 
-// 🚨 Reemplaza estos valores por los de tu consola Firebase
+// Config tomada de tu consola + databaseURL que pasaste
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  databaseURL: "TU_DATABASE_URL",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID",
+  apiKey: "AIzaSyBYJjCgk3RGce5C8UGUlFNaf687oPaGxHI",
+  authDomain: "las-hermanas-e26ff.firebaseapp.com",
+  projectId: "las-hermanas-e26ff",
+  storageBucket: "las-hermanas-e26ff.firebasestorage.app",
+  messagingSenderId: "909176117390",
+  appId: "1:909176117390:web:7eff1a08a51355496a11df",
+  databaseURL: "https://las-hermanas-e26ff-default-rtdb.firebaseio.com/",
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
-export const db = getDatabase(app);
+// Auth con persistencia en React Native (guarda sesión entre aperturas)
+let _auth;
+try {
+  _auth = initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) });
+} catch {
+  _auth = getAuth(app); // hot reload
+}
+export const auth = _auth;
+
+// DB con URL explícita (evita errores de parseo)
+export const db = getDatabase(app, firebaseConfig.databaseURL);
