@@ -25,6 +25,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
+        // 👇 Asegura que SIEMPRE arranque en la pantalla de Bienvenida
         initialRouteName="Welcome"
         screenOptions={{
           headerStyle: { backgroundColor: COLORS.crema },
@@ -34,8 +35,6 @@ export default function AppNavigator() {
             color: COLORS.rojo,
             fontFamily: "DMSerifDisplay_400Regular",
           },
-          // ⚠️ IMPORTANTE: NUNCA devolver <View>Texto</View>.
-          // Usamos 'title' (string) o un componente <Text/> si hace falta.
         }}
       >
         <Stack.Screen
@@ -43,19 +42,16 @@ export default function AppNavigator() {
           component={WelcomeScreen}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="ProductDetail"
           component={ProductDetailScreen}
           options={{ title: "Detalle" }}
         />
-
         <Stack.Screen
           name="CategoryList"
           component={CategoryListScreen}

@@ -1,36 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type User = { uid: string; email: string | null } | null;
-
-type AuthState = {
-  user: User;
-  status: "idle" | "loading" | "authenticated" | "error";
-  error?: string;
+export type FirebaseUser = {
+  uid: string;
+  email: string | null;
+  displayName?: string | null;
+  photoURL?: string | null;
 };
 
-const initialState: AuthState = { user: null, status: "idle" };
+type AuthState = {
+  user: FirebaseUser | null;
+};
+
+const initialState: AuthState = {
+  user: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser(state, action: PayloadAction<FirebaseUser | null>) {
       state.user = action.payload;
-      state.status = action.payload ? "authenticated" : "idle";
     },
-    setLoading: (state) => {
-      state.status = "loading";
-    },
-    setError: (state, action: PayloadAction<string>) => {
-      state.status = "error";
-      state.error = action.payload;
-    },
-    signOut: (state) => {
+    signOutLocal(state) {
       state.user = null;
-      state.status = "idle";
     },
   },
 });
 
-export const { setUser, setLoading, setError, signOut } = authSlice.actions;
+export const { setUser, signOutLocal } = authSlice.actions;
 export default authSlice.reducer;

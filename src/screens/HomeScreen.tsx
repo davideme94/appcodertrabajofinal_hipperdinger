@@ -1,23 +1,28 @@
 import React from "react";
-import { View, FlatList, StyleSheet } from "react-native";
-import { PRODUCTS } from "../features/products/mock";
-import ProductCard from "../components/ProductCard";
+import { View, Text, StyleSheet } from "react-native";
+import { COLORS } from "../theme/colors";
+import CategoryTabs from "../navigation/CategoryTabs";
 
 export default function HomeScreen() {
   return (
-    <View style={styles.wrap}>
-      <FlatList
-        data={PRODUCTS}
-        keyExtractor={(it) => it.id}
-        numColumns={2}
-        columnWrapperStyle={{ gap: 12 }}
-        contentContainerStyle={{ padding: 12, gap: 12 }}
-        renderItem={({ item }) => <ProductCard product={item} />}
-      />
+    <View style={styles.container}>
+      {/* Título dentro de la pantalla: ahora 'Productos' */}
+      <Text style={styles.h1}>Productos</Text>
+
+      {/* Tabs por categoría */}
+      <CategoryTabs />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, backgroundColor: "#f7f7f7" },
+  container: { flex: 1, backgroundColor: "#fff" },
+  h1: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+    fontSize: 24,
+    color: COLORS.rojo,
+    fontFamily: "DMSerifDisplay_400Regular",
+  },
 });

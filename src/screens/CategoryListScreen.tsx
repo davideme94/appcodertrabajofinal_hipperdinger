@@ -1,36 +1,61 @@
 import React, { useMemo } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
+import ProductCard, { Product } from "../components/ProductCard";
+import { useRoute, RouteProp } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
+import { COLORS } from "../theme/colors";
 import { PRODUCTS } from "../features/products/mock";
-import ProductCard from "../components/ProductCard";
 
-type Props = { route: { params: { category: string } } };
+type ParamList = {
+  CategoryList: { category: string };
+};
 
-export default function CategoryListScreen({ route }: Props) {
-  const { category } = route.params;
+export default function CategoryListScreen() {
+  const route = useRoute<RouteProp<ParamList, "CategoryList">>();
+  const category = route.params?.category ?? "all";
+  const dispatch = useDispatch();
 
-  const filtered = useMemo(
-    () =>
-      category === "Ofertas"
-        ? PRODUCTS.filter((p) => p.offer)
-        : PRODUCTS.filter((p) => p.category === category),
-    [category]
-  );
+  const data: Product[] = useMemo(() => {
+    if (category === "all") return PRODUCTS as Product[];
+    return (PRODUCTS as Product[]).filter((p: any) => p.category === category);
+  }, [category]);
+
+  const handleAdd = (p: Product) => {
+    dispatch(
+      addToCart({
+        id: p.id,
+        title: p.title,
+        price: p.price,
+        qty: 1,
+        image: p.image,
+      })
+    );
+  };
 
   return (
-    <View style={styles.wrap}>
+    <View style={styles.container}>
       <FlatList
-        data={filtered}
-        keyExtractor={(it) => it.id}
-        numColumns={2}
-        columnWrapperStyle={{ gap: 12 }}
-        contentContainerStyle={{ padding: 12, gap: 12 }}
-        renderItem={({ item }) => <ProductCard product={item} />}
-        showsVerticalScrollIndicator={false}
+        data={data}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ padding: 12 }}
+        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+        renderItem={({ item }) => (
+          <ProductCard product={item} onAdd={handleAdd} />
+        )}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, backgroundColor: "#f7f7f7" },
+  container: { flex: 1, backgroundColor: "#fff" },
+  h1: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+    fontSize: 24,
+    color: COLORS.rojo,
+    fontFamily: "DMSerifDisplay_400Regular",
+  },
 });

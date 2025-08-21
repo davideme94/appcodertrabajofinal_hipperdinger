@@ -23,7 +23,7 @@ export default function WelcomeScreen({ navigation }: Props) {
         <Pressable
           onPress={() => {
             Alert.alert("¡Bienvenida/o!", "Entrando a la tienda…");
-            navigation.replace("MainTabs");
+            navigation.replace("MainTabs"); // 👈 Solo navega al tocar “Entrar”
           }}
           style={({ pressed }) => [styles.btn, pressed && { opacity: 0.8 }]}
         >
@@ -45,44 +45,27 @@ export default function WelcomeScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: COLORS.crema, alignItems: "center", justifyContent: "center" },
   card: {
-    width: "88%",
-    padding: 24,
-    borderRadius: 24,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
+    width: "88%", padding: 24, borderRadius: 24, backgroundColor: "#fff", alignItems: "center",
+    shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 12, elevation: 6,
   },
   brandIcon: { fontSize: 48, marginBottom: 8 },
   title: {
     fontSize: 36,
     color: COLORS.rojo,
     textAlign: "center",
-    fontFamily: "DMSerifDisplay_400Regular", // títulos
+    fontFamily: "DMSerifDisplay_400Regular",
   },
   subtitle: {
     marginTop: 6,
     fontSize: 16,
     color: "#3b3b3b",
     textAlign: "center",
-    fontFamily: "Lora_400Regular", // texto
+    fontFamily: "Lora_400Regular",
   },
   btn: {
-    marginTop: 20,
-    backgroundColor: COLORS.naranja,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 16,
+    marginTop: 20, backgroundColor: COLORS.naranja, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16,
   },
   btnText: { color: "#fff", fontSize: 16, fontFamily: "Lora_700Bold" },
   palette: { flexDirection: "row", gap: 8, marginTop: 16 },
-  dot: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#00000010",
-  },
+  dot: { width: 20, height: 20, borderRadius: 10, borderWidth: 1, borderColor: "#00000010" },
 });

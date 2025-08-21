@@ -6,27 +6,33 @@ import { setup, loadCart, saveCart } from "../services/db";
 export default function PersistCart() {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectCartItems);
-  const hydrated = useRef(false);
+  const booted = useRef(false);
 
-  // 1) Setup + hidratar al inicio
+  // 1) Al montar: crear tablas y cargar carrito desde SQLite
   useEffect(() => {
     (async () => {
       try {
         await setup();
-        const stored = await loadCart();
-        dispatch(hydrateCart(stored));
-        hydrated.current = true;
-      } catch (e) {
-        console.warn("SQLite setup/load error", e);
+        const data = await loadCart();
+        dispatch(hydrateCart(data));
+        booted.current = true;
+      } catch (err) {
+        console.warn("SQLite setup/load error", err);
       }
     })();
   }, [dispatch]);
 
-  // 2) Guardar cada vez que cambia el carrito (después de hidratar)
+  // 2) Guardar en SQLite cuando cambian items (después del boot)
   useEffect(() => {
-    if (!hydrated.current) return;
-    saveCart(items).catch((e) => console.warn("SQLite save error", e));
+    if (!booted.current) return;
+    (async () => {
+      try {
+        await saveCart(items);
+      } catch (err) {
+        console.warn("SQLite save error", err);
+      }
+    })();
   }, [items]);
 
-  return null; // No renderiza nada
+  return null;
 }
